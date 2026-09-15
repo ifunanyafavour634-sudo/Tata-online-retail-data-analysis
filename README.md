@@ -1,533 +1,349 @@
 # Tata-online-retail-data-analysis
-Data analysis and visualization of an online retail dataset using Python and Power BI, based on the Tata Data Visualization project on Forage.
-# Tata Online Retail Data Analysis
+# TATA ONLINE RETAIL DATA ANALYSIS
 
-## Project Overview
+## TABLE OF CONTENTS
 
-This project was completed as part of the Tata Data Visualization job simulation on Forage.
-
-The project involved analyzing an online retail dataset containing transactional records from an online retail store. The analysis was focused on understanding sales performance, customer value, country-level revenue, and product demand to provide insights that could support business decision-making.
-
-The analysis workflow consisted of:
-
-**Raw Data → Python Data Cleaning & Analysis → Power BI Visualization → Business Insights**
-
-Python, primarily using Pandas, was used for data cleaning, preparation, and analysis. Power BI was then used to create the final visualizations and dashboard.
+* [BACKGROUND](#background)
+* [DATA STRUCTURE](#data-structure)
+* [EXECUTIVE SUMMARY](#executive-summary)
+* [INSIGHTS DEEP DIVE](#insights-deep-dive)
+* [RECOMMENDATIONS](#recommendations)
+* [ASSUMPTIONS AND CAVEATS](#assumptions-and-caveats)
+* [NEXT STEPS](#next-steps)
 
 ---
 
-## Business Problem
+# BACKGROUND
 
-The online retail business wanted to better understand its sales performance and customer activity across different time periods, countries, and customers.
+The Tata Group is a global business group operating across more than 100 countries and six continents. This project was completed as part of the **Tata Data Visualisation: Empowering Business with Effective Insights** job simulation on Forage, which simulates the work of a data visualisation analyst at Tata Insights and Quants (Tata iQ). The simulation focuses on using data visualisation and analysis to uncover insights that can support business decision-making.
 
-As part of the project, the CEO and CMO required answers to four business questions:
+The business scenario centres on an online retail business and requires the analyst to prepare insights for senior business stakeholders, particularly the **CEO and CMO**.
 
-1. What was the company's monthly revenue throughout 2011, and what seasonal patterns could be observed?
-2. Which 10 countries generated the highest revenue, excluding the United Kingdom, and what quantity was sold in those countries?
-3. Which 10 customers generated the highest revenue?
-4. Which countries had the highest demand, based on quantity sold, excluding the United Kingdom?
+As the data analyst, my objective was to transform the raw online retail transaction data into meaningful business insights by cleaning and analysing the data with **Python**, then communicating the results through an interactive **Power BI dashboard**.
 
-The analysis was designed to provide clear visual and data-driven information that could support business decisions around sales performance, customer targeting, and international expansion.
+The analysis was designed to answer four key questions raised from the perspective of the CEO and CMO:
 
----
+1. **CEO — Monthly Revenue Trend:**
+   What does the company's revenue look like month by month throughout 2011, and are there seasonal patterns that could support forecasting for the following year?
 
-## Project Objectives
+2. **CMO — Top 10 Countries:**
+   Which 10 countries generated the highest revenue, excluding the United Kingdom, and how does the quantity sold compare across these markets?
 
-The main objectives of the project were to:
+3. **CMO — Top 10 Customers:**
+   Who are the top 10 customers by revenue, ranked from highest to lowest, so that the business can identify its highest-value customers?
 
-* Clean and prepare the retail transaction data for analysis.
-* Calculate revenue from quantity sold and unit price.
-* Analyze monthly revenue throughout 2011.
-* Identify the top 10 countries by revenue, excluding the United Kingdom.
-* Compare revenue with quantity sold for the top-performing countries.
-* Identify the top 10 customers by total revenue.
-* Analyze country-level demand using quantity sold.
-* Create an interactive Power BI dashboard to communicate the results.
-* Present business insights that can support decision-making.
+4. **CEO — Country Demand:**
+   How does product demand vary across countries, excluding the United Kingdom, and which markets could represent potential opportunities for expansion?
 
----
+The project followed an analytical workflow of:
 
-## Dataset
+**Raw Data → Data Cleaning & Preparation → Python Analysis → Business Insights → Power BI Visualization**
 
-The dataset used in this project is the Online Retail dataset provided as part of the Tata Data Visualization job simulation on Forage.
+The official Tata simulation consists of four tasks covering business-scenario framing, choosing appropriate visuals, creating effective visuals, and communicating insights and analysis.
 
-The original dataset contains:
+### Analytical Focus
 
-* **541,909 rows**
-* **8 columns**
+The analysis focuses on four areas:
 
-### Dataset Columns
+1. **Revenue Performance** — examining monthly revenue throughout 2011 to identify changes and seasonal patterns.
 
-| Column        | Description                                  |
-| ------------- | -------------------------------------------- |
-| `InvoiceNo`   | Invoice number associated with a transaction |
-| `StockCode`   | Product/item code                            |
-| `Description` | Product description                          |
-| `Quantity`    | Number of units involved in the transaction  |
-| `InvoiceDate` | Date and time of the transaction             |
-| `UnitPrice`   | Price per unit                               |
-| `CustomerID`  | Unique customer identifier                   |
-| `Country`     | Customer's country                           |
+2. **Geographic Revenue Performance** — identifying the highest-revenue countries outside the United Kingdom and comparing their sales quantities.
+
+3. **Customer Value** — identifying the customers contributing the greatest revenue to the business.
+
+4. **Geographic Demand** — evaluating product demand across countries to identify markets with stronger purchasing activity.
 
 ---
 
-## Tools & Technologies
+# DATA STRUCTURE
 
-### Python
+## DATASET OVERVIEW
 
-Python was used for:
+The analysis uses the **Online Retail Data Set** supplied for the Tata Data Visualisation project.
 
-* Data inspection
-* Data cleaning
-* Data transformation
-* Revenue calculation
-* Date conversion
-* Grouping and aggregation
-* Business-question analysis
-* Exporting analysis results
+The original dataset contains **541,909 transaction records and 8 columns**.
 
-The main Python library used was:
+| Column      | Description                          |
+| ----------- | ------------------------------------ |
+| InvoiceNo   | Unique invoice/transaction reference |
+| StockCode   | Product/item code                    |
+| Description | Product description                  |
+| Quantity    | Number of units purchased            |
+| InvoiceDate | Date and time of the transaction     |
+| UnitPrice   | Price per unit                       |
+| CustomerID  | Customer identifier                  |
+| Country     | Customer's country                   |
 
-* **Pandas**
+The dataset contains transaction-level information covering online retail purchases from **December 2010 through December 2011**.
 
-### Power BI
+## DATA QUALITY AND INITIAL CHECKS
 
-Power BI was used for:
+The initial inspection identified missing values in two fields:
 
-* Data visualization
-* Business dashboard creation
-* Presenting monthly revenue
-* Presenting top countries by revenue and quantity
-* Presenting top customers by revenue
-* Presenting country-level demand
+* **Description:** 1,454 missing records
+* **CustomerID:** 135,080 missing records
 
----
+The remaining six fields contained no missing values in the original dataset.
 
-# Data Cleaning & Preparation
+The dataset also contained transactions with negative quantities. These records represent returned items and were removed from the analysis because the project analysis focuses on completed sales activity rather than returned quantities.
 
-The dataset was first loaded and examined in Python.
+There were also records with negative and zero unit prices. These were excluded before revenue calculations to prevent invalid price values from affecting the analysis.
 
-The cleaning process focused on preparing the transaction data for meaningful sales analysis.
+### Data Cleaning
 
-## 1. Removing Returned Transactions
+The main cleaning steps were:
 
-Negative values in the `Quantity` column represent returned transactions.
+1. Removed transactions where `Quantity < 0`.
 
-For this analysis, transactions with negative quantities were removed because the objective was to analyze sales and demand rather than returns.
+2. Removed transactions where `UnitPrice < 0`.
 
-```python
-df_clean = df[df["Quantity"] >= 0].copy()
-```
+3. Removed transactions where `UnitPrice = 0`.
 
-This reduced the dataset from:
+4. Created a new `Revenue` field using:
 
-**541,909 rows → 531,285 rows**
+   **Revenue = Quantity × UnitPrice**
 
----
+5. Converted `InvoiceDate` into a datetime field for time-based analysis.
 
-## 2. Removing Negative Unit Prices
+6. For customer-level analysis, records without a `CustomerID` were excluded because they could not be reliably attributed to an individual customer.
 
-Two records contained negative values in the `UnitPrice` column.
+7. For the country-specific analyses required by the business brief, the **United Kingdom was excluded**.
 
-These records were removed because a negative unit price would not provide a meaningful basis for calculating sales revenue.
+After removing negative quantities and invalid price records, the working dataset contained **530,104 records**.
 
-```python
-df_clean = df_clean[df_clean["UnitPrice"] >= 0].copy()
-```
+### Data Preparation in Python
 
----
+The analysis was performed using Python and Pandas. The cleaned dataset was then aggregated according to the four business questions before the resulting datasets were used for Power BI visualization.
 
-## 3. Removing Zero Unit Prices
-
-Transactions with a zero unit price were also removed so that the revenue calculation represented transactions with an actual positive selling price.
-
-```python
-df_clean = df_clean[df_clean["UnitPrice"] > 0].copy()
-```
-
----
-
-## 4. Creating the Revenue Column
-
-A new `Revenue` column was created by multiplying the quantity sold by the unit price.
+The principal derived metric was:
 
 ```python
 df_clean["Revenue"] = df_clean["Quantity"] * df_clean["UnitPrice"]
 ```
 
-This created a measure of transaction-level revenue that could then be aggregated by month, country, and customer.
-
----
-
-## 5. Converting the Invoice Date
-
-The `InvoiceDate` column was converted to a datetime format.
+For customer-level analysis, records with missing customer identifiers were excluded:
 
 ```python
-df_clean["InvoiceDate"] = pd.to_datetime(
-    df_clean["InvoiceDate"],
-    format="%m/%d/%Y %H:%M"
-)
+df_customer = df_clean.dropna(subset=["CustomerID"]).copy()
 ```
 
-This allowed the data to be grouped by year and month for time-series analysis.
-
----
-
-# Python Analysis
-
-## Business Question 1 — Monthly Revenue in 2011
-
-### Objective
-
-The CEO wanted to view revenue throughout 2011 at a monthly level in order to identify seasonal trends and support forecasting for the following year.
-
-First, transactions from 2011 were isolated:
-
-```python
-df_2011 = df_clean[df_clean["InvoiceDate"].dt.year == 2011].copy()
-```
-
-Monthly revenue was then calculated by grouping the transactions according to the month of the invoice date.
-
-```python
-monthly_revenue = (
-    df_2011.groupby(df_2011["InvoiceDate"].dt.month)["Revenue"]
-    .sum()
-    .reset_index()
-)
-
-monthly_revenue.columns = ["Month", "Revenue"]
-```
-
-The numeric month values were then converted into month names:
-
-```python
-monthly_revenue["Month"] = monthly_revenue["Month"].map({
-    1: "January",
-    2: "February",
-    3: "March",
-    4: "April",
-    5: "May",
-    6: "June",
-    7: "July",
-    8: "August",
-    9: "September",
-    10: "October",
-    11: "November",
-    12: "December"
-})
-```
-
-The resulting monthly revenue data was used to create the 2011 revenue time-series visualization in Power BI.
-
----
-
-# Business Question 2 — Top 10 Countries by Revenue
-
-### Objective
-
-The CMO wanted to identify the 10 countries generating the highest revenue, excluding the United Kingdom, and to compare their revenue with the quantity sold.
-
-The United Kingdom was excluded as specifically required by the business question.
+For the country-specific analyses:
 
 ```python
 df_q2 = df_clean[df_clean["Country"] != "United Kingdom"].copy()
 ```
 
-Revenue was aggregated by country:
-
-```python
-country_revenue = (
-    df_q2.groupby("Country")["Revenue"]
-    .sum()
-    .reset_index()
-)
-```
-
-The countries were sorted by revenue and the top 10 were selected:
-
-```python
-top10_countries = country_revenue.sort_values(
-    by="Revenue",
-    ascending=False
-).head(10)
-```
-
-Quantity sold was also aggregated by country:
-
-```python
-country_quantity = (
-    df_q2.groupby("Country")["Quantity"]
-    .sum()
-    .reset_index()
-)
-```
-
-The revenue and quantity results were then combined:
-
-```python
-top10_countries = top10_countries.merge(
-    country_quantity,
-    on="Country",
-    how="left"
-)
-```
-
-The resulting dataset was used in Power BI to visualize the top 10 countries by revenue alongside quantity sold.
+The analysis therefore separates **data preparation decisions** from the subsequent business analysis, ensuring that the Power BI visuals are based on prepared and aggregated analytical outputs rather than the unprocessed raw transaction data.
 
 ---
 
-# Business Question 3 — Top 10 Customers by Revenue
+# EXECUTIVE SUMMARY
 
-### Objective
+The analysis of the online retail transaction dataset identified clear differences in revenue performance across months, countries and customers.
 
-The CMO wanted to identify the highest-value customers based on total revenue, with the intention of understanding which customers generated the greatest sales value.
+Revenue during 2011 increased substantially toward the final quarter, with **November recording the highest monthly revenue at approximately £1.51 million**. October generated approximately **£1.15 million**, while September generated approximately **£1.06 million**, indicating a strong upward movement in revenue during the latter part of the year.
 
-Because this analysis required customer identification, records without a `CustomerID` were excluded.
+Outside the United Kingdom, **the Netherlands generated the highest revenue at approximately £285,446**, followed closely by **EIRE at approximately £283,454**, Germany at approximately £228,867 and France at approximately £209,715. The analysis also shows that the ranking of countries by revenue does not necessarily correspond exactly to their ranking by quantity sold.
 
-```python
-df_customer = df_clean.dropna(
-    subset=["CustomerID"]
-).copy()
-```
+Customer-level analysis identified **Customer 14646** as the highest-revenue customer, generating approximately **£280,206**, followed by Customer 18102 at approximately **£259,657** and Customer 17450 at approximately **£194,551**.
 
-Revenue was then grouped by customer:
+The country-demand analysis also showed that the Netherlands had the highest quantity sold outside the United Kingdom, with **200,361 units**, followed by EIRE with **147,173 units**, Germany with **119,261 units**, and France with **112,103 units**.
 
-```python
-customer_revenue = (
-    df_customer.groupby("CustomerID")["Revenue"]
-    .sum()
-    .reset_index()
-)
-```
-
-The customers were sorted from highest to lowest revenue, and the top 10 were selected:
-
-```python
-top10_customers = customer_revenue.sort_values(
-    by="Revenue",
-    ascending=False
-).head(10)
-```
-
-The resulting data was used to create a top 10 customers revenue visualization in Power BI.
+These results highlight the importance of monitoring seasonal revenue patterns, protecting high-value customers, understanding differences between revenue and sales volume across international markets, and evaluating high-demand countries as potential areas for further commercial attention.
 
 ---
 
-# Business Question 4 — Country-Level Demand
+# INSIGHTS DEEP DIVE
 
-### Objective
+## 1. REVENUE SEASONALITY — 2011
 
-The CEO wanted to understand demand across countries in order to identify potential opportunities for international expansion.
+The monthly revenue analysis was developed to help the CEO understand how revenue changed throughout 2011 and whether identifiable seasonal patterns could support future planning.
 
-The United Kingdom was excluded as required by the business question.
+Revenue fluctuated throughout the first eight months of the year before increasing strongly from September onwards.
 
-The analysis used total quantity sold as the measure of demand.
+The highest monthly revenue occurred in **November, at approximately £1.51 million**.
 
-```python
-country_demand = (
-    df_q2.groupby("Country")["Quantity"]
-    .sum()
-    .reset_index()
-)
-```
+The strongest months were:
 
-The countries were then sorted by quantity sold:
+| Month     |       Revenue |
+| --------- | ------------: |
+| November  | £1,509,496.33 |
+| October   | £1,154,979.30 |
+| September | £1,058,590.17 |
+| May       |   £770,536.02 |
+| June      |   £761,739.90 |
 
-```python
-country_demand = country_demand.sort_values(
-    by="Quantity",
-    ascending=False
-)
-```
+January recorded approximately **£691,364.56**, while December recorded approximately **£638,792.68**.
 
-The resulting dataset was visualized in Power BI to provide a single-country-level view of demand.
+The sharp increase from September through November indicates that the business experienced its strongest revenue performance toward the end of the year. This pattern is particularly relevant for inventory planning, marketing activity and operational preparation ahead of the final quarter.
 
----
+## 2. TOP 10 COUNTRIES BY REVENUE
 
-# Exporting the Analysis Results
+To address the CMO's requirement, the United Kingdom was excluded and countries were ranked according to total revenue.
 
-The four analytical datasets were exported from Python for use in the visualization stage.
+The highest-revenue markets were:
 
-```python
-monthly_revenue.to_excel(
-    "2011_monthly_revenue.xlsx",
-    index=False
-)
+| Rank | Country     |     Revenue | Quantity |
+| ---: | ----------- | ----------: | -------: |
+|    1 | Netherlands | £285,446.34 |  200,361 |
+|    2 | EIRE        | £283,453.96 |  147,173 |
+|    3 | Germany     | £228,867.14 |  119,261 |
+|    4 | France      | £209,715.11 |  112,103 |
+|    5 | Australia   | £138,521.31 |   83,901 |
+|    6 | Spain       |  £61,577.11 |   27,940 |
+|    7 | Switzerland |  £57,089.90 |   30,629 |
+|    8 | Belgium     |  £41,196.34 |   23,237 |
+|    9 | Sweden      |  £38,378.33 |   36,083 |
+|   10 | Japan       |  £37,416.37 |   26,016 |
 
-top10_countries.to_excel(
-    "top10_countries.xlsx",
-    index=False
-)
+The Netherlands generated the highest revenue outside the United Kingdom, while also recording the highest quantity sold among the countries in the analysis.
 
-top10_customers.to_excel(
-    "top10_customers.xlsx",
-    index=False
-)
+The results demonstrate why the CMO should evaluate both **revenue and quantity**, rather than relying on revenue alone. A market generating high transaction volume may have different commercial characteristics from a market generating high revenue with comparatively lower volume.
 
-country_demand.to_excel(
-    "country_demand.xlsx",
-    index=False
-)
-```
+## 3. TOP 10 CUSTOMERS BY REVENUE
 
-These outputs were then used as inputs for the Power BI visualization stage.
+Customer revenue was calculated after excluding records without a CustomerID. Customers were then ranked from highest to lowest according to their total revenue contribution.
 
----
+The top three customers were:
 
-# Power BI Visualization
+| Rank | Customer ID |     Revenue |
+| ---: | ----------: | ----------: |
+|    1 |       14646 | £280,206.02 |
+|    2 |       18102 | £259,657.30 |
+|    3 |       17450 | £194,550.79 |
 
-After completing the cleaning and analysis in Python, the results were visualized using Power BI.
+The remaining customers in the top 10 were:
 
-The dashboard contains visualizations addressing all four business questions:
+| Rank | Customer ID |     Revenue |
+| ---: | ----------: | ----------: |
+|    4 |       16446 | £168,472.50 |
+|    5 |       14911 | £143,825.06 |
+|    6 |       12415 | £124,914.53 |
+|    7 |       14156 | £117,379.63 |
+|    8 |       17511 |  £91,062.38 |
+|    9 |       16029 |  £81,024.84 |
+|   10 |       12346 |  £77,183.60 |
 
-### 1. 2011 Monthly Revenue
+The concentration of revenue among a relatively small group of high-value customers highlights the importance of understanding customer contribution when developing retention and relationship-management strategies.
 
-A line chart was used to display monthly revenue throughout 2011 and make changes in revenue over time easier to identify.
+## 4. COUNTRY DEMAND
 
-### 2. Top 10 Countries by Revenue
+Country demand was evaluated using total quantity sold, with the United Kingdom excluded as required by the business question.
 
-A column chart was used to compare the highest-revenue countries, excluding the United Kingdom, while also displaying quantity sold.
+The highest-demand countries were:
 
-### 3. Top 10 Customers by Revenue
+| Rank | Country     | Quantity Sold |
+| ---: | ----------- | ------------: |
+|    1 | Netherlands |       200,361 |
+|    2 | EIRE        |       147,173 |
+|    3 | Germany     |       119,261 |
+|    4 | France      |       112,103 |
+|    5 | Australia   |        83,901 |
+|    6 | Sweden      |        36,083 |
+|    7 | Switzerland |        30,629 |
+|    8 | Spain       |        27,940 |
+|    9 | Japan       |        26,016 |
+|   10 | Belgium     |        23,237 |
 
-A column chart was used to rank the top 10 customers according to the revenue they generated.
+The concentration of demand in a number of European markets, particularly the Netherlands, EIRE, Germany and France, provides useful direction for evaluating international market opportunities.
 
-### 4. Country-Level Demand
-
-A country-level map visualization was used to display demand based on quantity sold across countries, excluding the United Kingdom.
-
-The Power BI dashboard brings the four analyses together into a single business-focused view.
-
----
-
-# Key Findings
-
-The analysis provided several important observations:
-
-* Revenue varied across the months of 2011, making monthly analysis useful for identifying changes in sales performance and potential seasonal patterns.
-* Revenue performance differed considerably across countries when the United Kingdom was excluded.
-* The highest-revenue countries were not necessarily identified solely by quantity sold, demonstrating the importance of considering both revenue and volume.
-* A relatively small group of customers accounted for the highest individual customer revenue, making them important high-value customers to monitor and target.
-* Country-level quantity sold revealed differences in demand across international markets and can help identify markets that may warrant further investigation for expansion.
-
-The Power BI dashboard provides a visual way to explore these patterns and support business discussions.
+The Power BI dashboard was designed to present country-level demand in a single visual view, allowing the CEO to assess the geographical distribution of demand without relying on a long scrolling table.
 
 ---
 
-# Business Recommendations
+# RECOMMENDATIONS
 
-Based on the analysis, the business could consider:
+Based on the analysis, I would recommend the following actions:
 
-### 1. Monitor seasonal revenue patterns
+### 1. Prepare for stronger fourth-quarter demand
 
-The monthly 2011 revenue trend can be used to identify periods of stronger or weaker sales and support future sales planning.
+The substantial increase in revenue from September through November suggests that the business should prepare inventory, fulfilment capacity and marketing activities ahead of the final quarter.
 
-### 2. Prioritize high-performing international markets
+Historical monthly revenue should be incorporated into future demand and inventory planning.
 
-Countries generating strong revenue should be monitored closely to understand what is driving their performance and whether additional investment could generate further growth.
+### 2. Prioritize high-value international markets
 
-### 3. Develop strategies for high-value customers
+The Netherlands, EIRE, Germany and France generated the strongest revenue outside the United Kingdom.
 
-The top customers by revenue can be considered for targeted customer-retention and relationship-building strategies.
+Management should evaluate these markets further to understand customer acquisition, product preferences, repeat purchasing behaviour and opportunities for controlled expansion.
 
-### 4. Investigate high-demand markets
+### 3. Develop a high-value customer retention strategy
 
-Countries with high quantities sold may represent strong demand and could be investigated further when considering international expansion.
+The top customers contribute substantial revenue and should receive focused relationship management.
 
-### 5. Consider revenue and volume together
+Customer segmentation could be used to identify high-value customers, repeat customers and customers whose purchasing activity is declining.
 
-Looking at both revenue and quantity sold provides a more complete view of market performance than relying on either measure alone.
+### 4. Evaluate revenue alongside quantity
 
----
+Management should avoid evaluating market performance using sales volume alone.
 
-# Project Workflow
+Combining revenue and quantity provides a better understanding of market value and can help distinguish high-volume markets from markets generating stronger monetary returns.
 
-```text
-Online Retail Dataset
-        ↓
-Python / Pandas
-        ↓
-Data Cleaning
-        ↓
-Revenue Calculation
-        ↓
-Business Question Analysis
-        ↓
-Analysis Results
-        ↓
-Power BI
-        ↓
-Dashboard & Visualizations
-        ↓
-Business Insights
-```
+### 5. Use geographic demand to support expansion decisions
+
+Countries with consistently high demand should be evaluated using additional commercial factors before expansion decisions are made, including customer growth, order frequency, profitability, logistics costs and operational feasibility.
 
 ---
 
-# Project Files
+# ASSUMPTIONS AND CAVEATS
 
-```text
-tata-online-retail-data-analysis/
-│
-├── README.md
-│
-├── Python/
-│   └── tata_retail_analysis.py
-│
-├── PowerBI/
-│   └── dashboard.png
-│
-└── Data/
-    └── README.md
-```
+1. **Returns:** Negative quantities were treated as returned items and removed from the sales analysis rather than being matched back to their original transactions.
 
-### Python
+2. **Invalid prices:** Negative and zero unit-price records were removed before revenue calculations to prevent invalid price values from affecting the analysis.
 
-Contains the Python analysis used for data cleaning, preparation, and business-question analysis.
+3. **Customer identification:** Customer-level analysis excludes records where `CustomerID` is missing because those transactions cannot be reliably attributed to an individual customer.
 
-### PowerBI
+4. **United Kingdom exclusion:** The United Kingdom was excluded from the country-level analyses where the Tata business question specifically required it.
 
-Contains the final dashboard screenshot.
+5. **Revenue calculation:** Revenue was calculated as `Quantity × UnitPrice` based on the transaction-level fields available in the dataset.
 
-### Data
+6. **Descriptive analysis:** The analysis identifies historical patterns in the available transaction data. The observed monthly pattern should therefore be treated as evidence for planning rather than a guarantee of future performance.
 
-Contains information about the dataset source rather than the original raw dataset.
+7. **Expansion decisions:** Country demand and revenue are indicators of market opportunity, but they should be combined with profitability, customer growth, logistics and other commercial considerations before investment decisions are made.
 
 ---
 
-# Skills Demonstrated
+# NEXT STEPS
 
-* Python
-* Pandas
-* Data Cleaning
-* Data Preparation
-* Exploratory Data Analysis
-* Data Transformation
-* Data Aggregation
-* Business Analysis
-* Revenue Analysis
-* Customer Analysis
-* Country-Level Analysis
-* Time-Series Analysis
-* Power BI
-* Data Visualization
-* Business Intelligence
-* Data Storytelling
+1. Extend the analysis beyond 2011 when additional transaction data becomes available to determine whether the observed seasonal patterns remain consistent.
+
+2. Introduce customer segmentation to distinguish high-value, frequent and declining customers.
+
+3. Analyse product-level performance to identify the products contributing most to revenue and demand in each major market.
+
+4. Incorporate profitability and other operational costs where available so that market opportunities can be evaluated beyond revenue and quantity.
+
+5. Develop a recurring Power BI reporting process that allows management to monitor revenue, customer contribution and geographic demand over time.
+
+6. Use the findings as a starting point for deeper market and customer analysis before making expansion or retention decisions.
 
 ---
 
-# Conclusion
+## PROJECT WORKFLOW
 
-This project demonstrates an end-to-end data analysis workflow, beginning with raw transactional data and progressing through data cleaning, analysis, visualization, and business interpretation.
+**Raw Online Retail Data → Python Data Cleaning → Python Business Analysis → Aggregated Analysis Outputs → Power BI Dashboard → Business Insights → Recommendations**
 
-Python was used to prepare and analyze the data, while Power BI was used to communicate the results through an interactive business dashboard.
+## TOOLS USED
 
-The project provided practical experience in transforming a large retail dataset into structured information that can support decisions around revenue performance, customer value, international markets, and demand.
+* **Python**
 
----
+  * Pandas
+  * Data cleaning
+  * Data transformation
+  * Aggregation
+  * Business analysis
 
-## Project Source
+* **Power BI**
 
-This project was completed as part of the **Tata Data Visualization job simulation on Forage**.
+  * Data visualization
+  * Dashboard development
+  * KPI presentation
+  * Interactive filtering
+  * Geographic visualization
+
+## PROJECT OUTCOME
+
+The project transformed a raw dataset containing **541,909 retail transactions** into a structured analytical workflow that answers four executive-level business questions around revenue seasonality, international markets, customer value and geographic demand.
+
+The analysis demonstrates the use of data cleaning, exploratory analysis, aggregation and business-focused visualization to translate transactional data into insights that can support management decision-making.
+   
