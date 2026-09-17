@@ -1,5 +1,6 @@
 # Tata-online-retail-data-analysis
 # TATA ONLINE RETAIL DATA ANALYSIS
+<img width="578" height="323" alt="Screenshot 2026-09-10 012735" src="https://github.com/user-attachments/assets/9288a6f3-2329-4da5-a6fe-c7a4b74f19f4" />
 
 ## TABLE OF CONTENTS
 
